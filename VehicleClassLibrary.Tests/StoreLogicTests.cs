@@ -1,6 +1,11 @@
+
+//Bridger Davidson
+//CST-250
+
 using System.Data;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Schema;
+using VehicleClassLibrary2._2.Models;
 
 namespace VehicleClassLibrary.Tests
 {
@@ -103,12 +108,12 @@ namespace VehicleClassLibrary.Tests
 
             decimal total = store.Checkout();
 
-            List<VehicleModel> cartafterCheckout = store.GetShoppingCart();
+            List<VehicleModel> cartAfterCheckout = store.GetShoppingCart();
 
             Assert.True(total >= (car1.Price + car2.Price) * 0.95m);
             Assert.True(total <= (car1.Price + car2.Price) * 1.05m);
 
-            Assert.Empty(cartafterCheckout);
+            Assert.Empty(cartAfterCheckout);
         }
     }
 }
