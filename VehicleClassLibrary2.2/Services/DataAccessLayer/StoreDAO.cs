@@ -126,5 +126,184 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
 
             return total;
         }
+
+        /// <summary>
+        /// Write the inventory to a text file
+        /// </summary>
+        /// <returns></returns>
+        public bool WriteInventory()
+        {
+            // Check if the directory exsists
+            if (!Directory.Exists(_fileDirectory))
+            {
+                // If it doesn't exist
+                Directory.CreateDirectory(_fileDirectory);
+            }
+            try
+            {
+                // Create the stream writer to write to the file
+                using StreamWriter writer = new StreamWriter(_filePath);
+                {
+                    foreach (VehicleModel vehicle in _inventory)
+                    {
+                        Type type = vehicle.GetType();
+                        switch (type.Name)
+                        {
+                            case "CarModel":
+                                CarModel car = (CarModel)vehicle;
+                                writer.WriteLine($"Car, {car.Make}, {car.Model}, {car.Year}, {car.Price}, {car.NumOfWheels}, {car.IsConvertable}, {car.TrunkSize}");
+                                break;
+
+                            case "MotorcycleModel":
+                                MotorcycleModel motorcycle = (MotorcycleModel)vehicle;
+                                writer.WriteLine($"Motorcycle, {motorcycle.Make}, {motorcycle.Model}, {motorcycle.Year}, {motorcycle.Price}, {motorcycle.NumOfWheels}, {motorcycle.HasSideCar}, {motorcycle.SeatHeight}");
+                                break;
+
+                            case "PickupModel":
+                                PickupModel pickup = (PickupModel)vehicle;
+                                writer.WriteLine($"Pickup, {pickup.Make}, {pickup.Model}, {pickup.Year}, {pickup.Price}, {pickup.NumOfWheels}, {pickup.HasTopper}, {pickup.BedLength}");
+                                break;
+
+                            default:
+                                writer.WriteLine($"Vehicle, {vehicle.Make}, {vehicle.Model}, {vehicle.Year}, {vehicle.Price}, {vehicle.NumOfWheels}, {vehicle.HasTopper}, {vehicle.BedLength}");
+                                break;
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        } // End of Write inventory
+
+        /// <summary>
+        /// Read the list of vehicles from a text file
+        /// </summary>
+        /// <returns></returns>
+        public List<VehicleModel> ReadInventory()
+        {
+            string? line = "";
+            string[] parts = [];
+            string make = "", model = "";
+            int year = 0, numOfWheels = 0;
+            decimal price = 0m;
+
+            bool isConvertable = false, hasSideCar = false, hasTopper = false;
+            decimal trunkSize = 0m, seatHeight = 0, bedLength = 0;
+
+            try
+            {
+                if(File.Exists(_filePath))
+                {
+                    using (StreamReader reader = new StreamReader(_filePath))
+                    {
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            // Split the line just read in on the commas
+                            parts = line.Split(", ");
+
+                            // Use the parts array to get the common data
+                            make = parts[1];
+                            model = parts[2];
+                            year = ParseInteger(parts[3]);
+                            price = ParseInteger(parts[4]);
+                            numOfWheels = ParseInteger(parts[5]);
+
+                            // Use the first piece of data to create a swithc for the specific model
+                            switch(parts[0])
+                            {
+                                case "Car":
+                                    isConvertable = ParseBoolean(parts[6]);
+                                    trunkSize = ParseDecimal(parts[7]);
+                                    CarModel car = new CarModel(0, make, model, year, price, numOfWheels, isConvertable, trunkSize);
+                                    AddVehicleToInventory(car);
+                                    break;
+
+                                case "Motorcycle":
+                                    hasSideCar = ParseBoolean(parts[6]);
+                                    seatHeight = ParseDecimal(parts[7]);
+                                    MotorcycleModel motorcycle = new MotorcycleModel(0, make, model, year, price, numOfWheels, hasSideCar, seatHeight);
+                                    AddVehicleToInventory(motorcycle);
+                                    break;
+
+                                case "Pickup":
+                                    hasTopper = ParseBoolean(parts[6]);
+                                    bedLength = ParseDecimal(parts[7]);
+                                    PickupModel pickup = new PickupModel(0, make, model, year, price, numOfWheels, hasTopper, bedLength);
+                                    AddVehicleToInventory(pickup);
+                                    break;
+
+                                default:
+                                    VehicleModel vehicle = new VehicleModel(0, make, model, year, price, numOfWheels);
+                                    AddVehicleToInventory(vehicle);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                // Return the inventory as is
+                return _inventory;
+            }
+            // Return the read inventory
+            return _inventory;
+        } // End of ReadInventory
+
+        /// <summary>
+        /// Method to safely parse an int
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private int ParseInteger(string input)
+        {
+            try
+            {
+                // Parse the input and return
+                return int.Parse(input);
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Method to safely parse a decimal
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        private decimal ParseDecimal(string input)
+        {
+            try
+            {
+                return decimal.Parse(input);
+            }
+            catch (Exception e)
+            {
+                return 0m;
+            }
+        }
+
+        /// <summary>
+        /// Method to safely parse a bool
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private bool ParseBoolean(string input)
+        {
+            try
+            {
+                return bool.Parse(input);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }
