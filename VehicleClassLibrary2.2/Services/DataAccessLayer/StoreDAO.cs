@@ -108,5 +108,23 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
             // Return number of items in shopping cart
             return _shoppingCart.Count;
         }
+
+        /// <summary>
+        /// Get the total of the users shopping cart and clear the cart
+        /// </summary>
+        /// <returns></returns>
+        public decimal Checkout()
+        {
+            decimal total = 0m;
+            foreach (VehicleModel vehicle in _shoppingCart)
+            {
+                total += vehicle.Price;
+            }
+
+            //Clear the cart
+            _shoppingCart.Clear();
+
+            return total;
+        }
     }
 }
