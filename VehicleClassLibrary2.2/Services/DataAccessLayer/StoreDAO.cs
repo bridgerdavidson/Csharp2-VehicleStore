@@ -7,6 +7,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -165,7 +166,7 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
                                 break;
 
                             default:
-                                writer.WriteLine($"Vehicle, {vehicle.Make}, {vehicle.Model}, {vehicle.Year}, {vehicle.Price}, {vehicle.NumOfWheels}, {vehicle.HasTopper}, {vehicle.BedLength}");
+                                writer.WriteLine($"Vehicle, {vehicle.Make}, {vehicle.Model}, {vehicle.Year}, {vehicle.Price}, {vehicle.NumOfWheels}");
                                 break;
                         }
                     }
@@ -186,8 +187,8 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
         {
             string? line = "";
             string[] parts = [];
-            string make = "", model = "";
-            int year = 0, numOfWheels = 0;
+            string make = "", model = "", color = "";
+            int year = 0, numOfWheels = 0, mileage = 0;
             decimal price = 0m;
 
             bool isConvertable = false, hasSideCar = false, hasTopper = false;
@@ -195,7 +196,28 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
 
             try
             {
-                if(File.Exists(_filePath))
+                if (!File.Exists(_filePath))
+                    {
+                        Console.WriteLine("File dont exist, creating...");
+                        Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
+                        File.Create(_filePath).Close();
+                        CarModel car = new CarModel
+                        {
+                            Id = 1,
+                            Make = "Honda",
+                            Model = "Civic",
+                            Year = 2022,
+                            Price = 25000m,
+                            NumOfWheels = 4,
+                            Color = "yellow",
+                            Mileage = 100000,
+                            IsConvertable = true,
+                            TrunkSize = 2.5m
+                        };
+                        AddVehicleToInventory(car);
+                        WriteInventory();
+
+                    }
                 {
                     using (StreamReader reader = new StreamReader(_filePath))
                     {
@@ -210,33 +232,121 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
                             year = ParseInteger(parts[3]);
                             price = ParseInteger(parts[4]);
                             numOfWheels = ParseInteger(parts[5]);
-
+                            color = parts[6];
+                            mileage = ParseInteger(parts[7]);
                             // Use the first piece of data to create a swithc for the specific model
-                            switch(parts[0])
+                            switch (parts[0])
                             {
                                 case "Car":
-                                    isConvertable = ParseBoolean(parts[6]);
-                                    trunkSize = ParseDecimal(parts[7]);
-                                    CarModel car = new CarModel(0, make, model, year, price, numOfWheels, isConvertable, trunkSize);
-                                    AddVehicleToInventory(car);
+                                    bool carFound = false;
+                                    isConvertable = ParseBoolean(parts[8]);
+                                    trunkSize = ParseDecimal(parts[9]);
+                                    CarModel car = new CarModel(0, make, model, year, price, numOfWheels, color, mileage, isConvertable, trunkSize);
+                                    // Make sure there are no duplicates in the txt file
+                                    foreach(VehicleModel inventoryVehicle in _inventory)
+                                    {
+                                        // Select only the cars
+                                        if(inventoryVehicle is CarModel)
+                                        {
+                                            // Cast the VehicleModel to CarModel
+                                            CarModel newCar = (CarModel)inventoryVehicle;
+                                            // if duplicate, change the flag "found" to true
+                                            if (car.Make == newCar.Make &&
+                                                car.Model == newCar.Model &&
+                                                car.Year == newCar.Year &&
+                                                car.Price == newCar.Price &&
+                                                car.NumOfWheels == newCar.NumOfWheels &&
+                                                car.Color == newCar.Color &&
+                                                car.Mileage == newCar.Mileage &&
+                                                car.IsConvertable == newCar.IsConvertable &&
+                                                car.TrunkSize == newCar.TrunkSize)
+                                            {
+                                                carFound = true;
+                                            }
+                                        }
+                                        
+                                    }
+                                    // If duplicate, don't add to inventory. If not, add to inventory
+                                    if (!carFound)
+                                    {
+                                        AddVehicleToInventory(car);
+                                    }
                                     break;
 
                                 case "Motorcycle":
-                                    hasSideCar = ParseBoolean(parts[6]);
-                                    seatHeight = ParseDecimal(parts[7]);
-                                    MotorcycleModel motorcycle = new MotorcycleModel(0, make, model, year, price, numOfWheels, hasSideCar, seatHeight);
-                                    AddVehicleToInventory(motorcycle);
+                                    bool motoFound = false;
+                                    hasSideCar = ParseBoolean(parts[8]);
+                                    seatHeight = ParseDecimal(parts[9]);
+                                    MotorcycleModel motorcycle = new MotorcycleModel(0, make, model, year, price, numOfWheels, color, mileage, hasSideCar, seatHeight);
+                                    // Make sure there are no duplicates in the txt file
+                                    foreach (VehicleModel inventoryVehicle in _inventory)
+                                    {
+                                        // Select only the motorcycles
+                                        if (inventoryVehicle is MotorcycleModel)
+                                        {
+                                            // Cast the VehicleModel to MotorcycleModel
+                                            MotorcycleModel newMotorcycle = (MotorcycleModel)inventoryVehicle;
+                                            // if duplicate, change the flag "found" to true
+                                            if (motorcycle.Make == newMotorcycle.Make &&
+                                                motorcycle.Model == newMotorcycle.Model &&
+                                                motorcycle.Year == newMotorcycle.Year &&
+                                                motorcycle.Price == newMotorcycle.Price &&
+                                                motorcycle.NumOfWheels == newMotorcycle.NumOfWheels &&
+                                                motorcycle.Color == newMotorcycle.Color &&
+                                                motorcycle.Mileage == newMotorcycle.Mileage &&
+                                                motorcycle.HasSideCar == newMotorcycle.HasSideCar &&
+                                                motorcycle.SeatHeight == newMotorcycle.SeatHeight)
+                                            {
+                                                motoFound = true;
+                                            }
+                                        }
+
+                                    }
+                                    // If duplicate, don't add to inventory. If not, add to inventory
+                                    if (!motoFound)
+                                    {
+                                        AddVehicleToInventory(motorcycle);
+                                    }
                                     break;
 
                                 case "Pickup":
-                                    hasTopper = ParseBoolean(parts[6]);
-                                    bedLength = ParseDecimal(parts[7]);
-                                    PickupModel pickup = new PickupModel(0, make, model, year, price, numOfWheels, hasTopper, bedLength);
-                                    AddVehicleToInventory(pickup);
+                                    bool pickupFound = false;
+                                    hasTopper = ParseBoolean(parts[8]);
+                                    bedLength = ParseDecimal(parts[9]);
+                                    PickupModel pickup = new PickupModel(0, make, model, year, price, numOfWheels, color, mileage, hasTopper, bedLength);
+                                    // Make sure there are no duplicates in the txt file
+                                    foreach (VehicleModel inventoryVehicle in _inventory)
+                                    {
+                                        // Select only the pickups
+                                        if (inventoryVehicle is PickupModel)
+                                        {
+                                            // Cast the VehicleModel to PickupModel
+                                            PickupModel newPickup = (PickupModel)inventoryVehicle;
+                                            // if duplicate, change the flag "found" to true
+                                            if (pickup.Make == newPickup.Make &&
+                                                pickup.Model == newPickup.Model &&
+                                                pickup.Year == newPickup.Year &&
+                                                pickup.Price == newPickup.Price &&
+                                                pickup.NumOfWheels == newPickup.NumOfWheels &&
+                                                pickup.Color == newPickup.Color &&
+                                                pickup.Mileage == newPickup.Mileage &&
+                                                pickup.HasTopper == newPickup.HasTopper &&
+                                                pickup.BedLength == newPickup.BedLength)
+                                            {
+                                                pickupFound = true;
+                                            }
+                                        }
+
+                                    }
+                                    // If duplicate, don't add to inventory. If not, add to inventory
+                                    if (!pickupFound)
+                                    {
+                                        AddVehicleToInventory(pickup);
+                                    }
                                     break;
 
                                 default:
-                                    VehicleModel vehicle = new VehicleModel(0, make, model, year, price, numOfWheels);
+                                    VehicleModel vehicle = new VehicleModel(0, make, model, year, price, numOfWheels, color, mileage);
                                     AddVehicleToInventory(vehicle);
                                     break;
                             }
@@ -265,7 +375,7 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
                 // Parse the input and return
                 return int.Parse(input);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return 0;
             }
@@ -283,7 +393,7 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
             {
                 return decimal.Parse(input);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return 0m;
             }
@@ -300,7 +410,7 @@ namespace VehicleClassLibrary2._2.Services.DataAccessLayer
             {
                 return bool.Parse(input);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

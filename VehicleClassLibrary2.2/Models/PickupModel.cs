@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace VehicleClassLibrary2._2.Models
 {
-    internal class PickupModel : VehicleModel
+    public class PickupModel : VehicleModel
     {
         // Class level props
         public decimal BedLength { get; set; }
@@ -40,7 +40,7 @@ namespace VehicleClassLibrary2._2.Models
         /// <param name="numOfWheels"></param>
         /// <param name="hasTopper"></param>
         /// <param name="bedLength"></param>
-        public PickupModel(int id, string make, string model, int year, decimal price, int numOfWheels, bool hasTopper, decimal bedLength) : base(id, make, model, year, price, numOfWheels)
+        public PickupModel(int id, string make, string model, int year, decimal price, int numOfWheels, string color, int mileage, bool hasTopper, decimal bedLength) : base(id, make, model, year, price, numOfWheels, color, mileage)
         {
             HasTopper = hasTopper;
             BedLength = bedLength;
@@ -54,7 +54,7 @@ namespace VehicleClassLibrary2._2.Models
         {
             // 1: 1994 Chevy Siverado with 4 wheels and a 7 foot bed with(out) a topper - $1,500.00
             string topper = HasTopper ? "with" : "without";
-            return $"{Id}: {Year} {Make} {Model} with {NumOfWheels} wheels and a {BedLength} foot bed {topper} a topper - {Price:C2}";
+            return $"{Id}: {Year} {Color} {Make} {Model} with {NumOfWheels} wheels and a {BedLength} foot bed {topper} a topper, {Mileage} miles on the engine - {Price:C2}";
         } 
     }
 }

@@ -39,7 +39,7 @@ namespace VehicleClassLibrary2._2.Models
         /// <param name="year"></param>
         /// <param name="price"></param>
         /// <param name="numOfWheels"></param>
-        public CarModel(int id, string make, string model, int year, decimal price, int numOfWheels, bool isConvertable, decimal trunkSize) : base(id, make, model, year, price, numOfWheels)
+        public CarModel(int id, string make, string model, int year, decimal price, int numOfWheels, string color, int mileage, bool isConvertable, decimal trunkSize) : base(id, make, model, year, price, numOfWheels, color, mileage)
         {
             // Notice how the base identifies which perameters are from the VehicleModel class
             IsConvertable = isConvertable;
@@ -58,7 +58,7 @@ namespace VehicleClassLibrary2._2.Models
             // Print the vehicle in the following format using string interpolation...
             // 1: 2022 Honda Civic with 4 wheels and a 14.7 cubic foot trunk with(out) a convertable top - $27,000.00
 
-            return $"{Id}: {Year} {Make} {Model} with {NumOfWheels} and a {TrunkSize} cubic foot trunk {convertable} a convertable top - {Price:C2}";
+            return $"{Id}: {Year} {Color} {Make} {Model} with {NumOfWheels} and a {TrunkSize} cubic foot trunk {convertable} a convertable top, {Mileage} miles on the engine - {Price:C2}";
         }
     }
 }

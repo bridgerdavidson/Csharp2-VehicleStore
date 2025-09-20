@@ -25,6 +25,8 @@ namespace VehicleClassLibrary2._2.Models
         public int Year { get; set; }
         public decimal Price { get; set; }
         public int NumOfWheels { get; set; }
+        public string Color { get; set; }
+        public int Mileage { get; set; }
 
         /// <summary>
         /// Default Constructor
@@ -37,6 +39,8 @@ namespace VehicleClassLibrary2._2.Models
             Year = 0;
             Price = 0;
             NumOfWheels = 0;
+            Color = "Unknown";
+            Mileage = 0;
         }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace VehicleClassLibrary2._2.Models
         /// <param name="year"></param>
         /// <param name="price"></param>
         /// <param name="numOfWheels"></param>
-        public VehicleModel(int id, string make, string model, int year, decimal price, int numOfWheels)
+        public VehicleModel(int id, string make, string model, int year, decimal price, int numOfWheels, string color, int mileage)
         {
             Id = id;
             Make = make;
@@ -56,7 +60,10 @@ namespace VehicleClassLibrary2._2.Models
             Year = year;
             Price = price;
             NumOfWheels = numOfWheels;
+            Color = color;
+            Mileage = mileage;
         }
+
 
         /// <summary>
         /// ToString method for printing a vehicle
@@ -66,7 +73,7 @@ namespace VehicleClassLibrary2._2.Models
         {
             // Print the vehicle in the following format...
             // 1: 2022 Honda Civic with 4 wheels - $800.00
-            return $"{Id}: {Year} {Make} {Model} with {NumOfWheels} wheels - {Price:C2}";
+            return $"{Id}: {Year} {Color} {Make} {Model} with {NumOfWheels} wheels, {Mileage} miles on the engine - {Price:C2}";
         }
     }
 }

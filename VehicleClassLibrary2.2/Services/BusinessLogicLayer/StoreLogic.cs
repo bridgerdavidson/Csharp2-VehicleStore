@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * Bridger Davidson
+ * CST-250
+ * 09/13/2025
+ * VehicleClassLibrary - StoreLogic
+ * Activity 1 - In class activity
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,18 +62,35 @@ namespace VehicleClassLibrary2._2.Services.BusinessLogicLayer
         /// </summary>
         /// <param name="vehicle"></param>
         /// <returns></returns>
-        public int AddVehicleToCart(VehicleModel vehicle)
+        public int AddVehicleToCart(int vehicleId)
         {
-            return _storeDAO.AddVehicleToCart(vehicle.Id);
+            return _storeDAO.AddVehicleToCart(vehicleId);
         }
 
-        // Add checkout method
+        /// <summary>
+        /// Write the inventory to a text file
+        /// </summary>
+        public void WriteInventory()
+        {
+            _storeDAO.WriteInventory();
+        }
+        /// <summary>
+        /// Read the list of vehicles from a text file
+        /// </summary>
+        /// <returns></returns>
+        public List<VehicleModel> ReadInventory()
+        {
+            return _storeDAO.ReadInventory();
+        }
+
+        /// <summary>
+        /// Checkout pulling from the DAO
+        /// </summary>
+        /// <returns></returns>
         public decimal Checkout()
         {
             return _storeDAO.Checkout();
         }
 
-        // HOMEWORK:
-        // Complete the activity guide steps 42-50
     }
 }

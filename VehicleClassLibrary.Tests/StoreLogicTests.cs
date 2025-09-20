@@ -6,6 +6,7 @@ using System.Data;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Schema;
 using VehicleClassLibrary2._2.Models;
+using VehicleClassLibrary2._2.Services.BusinessLogicLayer;
 
 namespace VehicleClassLibrary.Tests
 {
@@ -18,8 +19,8 @@ namespace VehicleClassLibrary.Tests
             CarModel car = new CarModel
             {
                 Id = 1,
-                Make = 'Honda',
-                Model = 'Civic',
+                Make = "Honda",
+                Model = "Civic",
                 Year = 2022,
                 Price = 25000m,
                 NumOfWheels = 4,
@@ -49,8 +50,8 @@ namespace VehicleClassLibrary.Tests
             CarModel car = new CarModel
             {
                 Id = 1,
-                Make = 'Honda',
-                Model = 'Civic',
+                Make = "Honda",
+                Model = "Civic",
                 Year = 2022,
                 Price = 25000m,
                 NumOfWheels = 4,
@@ -80,8 +81,8 @@ namespace VehicleClassLibrary.Tests
             CarModel car1 = new CarModel
             {
                 Id = 3,
-                Make = 'Ford',
-                Model = 'F-150',
+                Make = "Ford",
+                Model = "F-150",
                 Year = 2021,
                 Price = 40000m,
                 NumOfWheels = 4,
@@ -91,8 +92,8 @@ namespace VehicleClassLibrary.Tests
             CarModel car2 = new CarModel
             {
                 Id = 4,
-                Make = 'Chevy',
-                Model = 'Silverado',
+                Make = "Chevy",
+                Model = "Silverado",
                 Year = 2022,
                 Price = 45000m,
                 NumOfWheels = 4,
@@ -103,8 +104,8 @@ namespace VehicleClassLibrary.Tests
             store.AddVehicleToInventory(car1);
             store.AddVehicleToInventory(car2);
 
-            store.AddVehicleToCart(car1);
-            store.AddVehicleToCart(car2);
+            store.AddVehicleToCart(car1.Id);
+            store.AddVehicleToCart(car2.Id);
 
             decimal total = store.Checkout();
 

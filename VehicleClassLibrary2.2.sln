@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleClassLibrary2.2", "V
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleClassLibrary.Tests", "VehicleClassLibrary.Tests\VehicleClassLibrary.Tests.csproj", "{54D932C7-0F6D-4BE5-A3A4-51C7B2E87257}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleStoreConsoleApp", "VehicleStoreConsoleApp\VehicleStoreConsoleApp.csproj", "{F46BA0FA-BBA1-4626-9D50-40FCA2EFE614}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleStoreGUIApp", "VehicleStoreGUIApp\VehicleStoreGUIApp.csproj", "{935DD41A-6F78-49A7-9BF9-41D2368AB3B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{54D932C7-0F6D-4BE5-A3A4-51C7B2E87257}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54D932C7-0F6D-4BE5-A3A4-51C7B2E87257}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54D932C7-0F6D-4BE5-A3A4-51C7B2E87257}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F46BA0FA-BBA1-4626-9D50-40FCA2EFE614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F46BA0FA-BBA1-4626-9D50-40FCA2EFE614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F46BA0FA-BBA1-4626-9D50-40FCA2EFE614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F46BA0FA-BBA1-4626-9D50-40FCA2EFE614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935DD41A-6F78-49A7-9BF9-41D2368AB3B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935DD41A-6F78-49A7-9BF9-41D2368AB3B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935DD41A-6F78-49A7-9BF9-41D2368AB3B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935DD41A-6F78-49A7-9BF9-41D2368AB3B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
